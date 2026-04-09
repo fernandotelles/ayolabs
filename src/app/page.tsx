@@ -122,7 +122,7 @@ const Navbar = () => {
 
 const Hero = () => {
   return (
-    <section id="home" className="relative pt-44 pb-16 sm:pt-48 sm:pb-32 overflow-hidden bg-blue-soft">
+    <section id="home" className="relative pt-32 pb-16 sm:pt-48 sm:pb-32 overflow-hidden bg-blue-soft">
       <div className="absolute top-0 right-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-blue-100/30 rounded-full blur-[80px] sm:blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-sky-100/30 rounded-full blur-[80px] sm:blur-[120px] -z-10 -translate-x-1/2 translate-y-1/2" />
       
@@ -503,7 +503,7 @@ const Contact = () => {
   return (
     <section id="contato" className="py-24 sm:py-40 relative overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-        <div className="card-white p-8 sm:p-16 md:p-32 rounded-[2rem] sm:rounded-[4rem] border-blue-600/10 bg-gradient-to-b from-white to-blue-50/50">
+        <div className="card-white p-8 sm:p-12 md:p-24 rounded-[2rem] sm:rounded-[4rem] border-blue-600/10 bg-gradient-to-b from-white to-blue-50/50">
           <h2 className="text-3xl sm:text-5xl lg:text-8xl font-black mb-6 sm:mb-10 leading-tight text-slate-900">Pronto para <br />Escalar?</h2>
           
           <AnimatePresence mode="wait">
