@@ -8,6 +8,10 @@
   --color-card: #f8fafc; /* Slate-50 */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #0f172a;

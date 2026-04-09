@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bot, 
   Workflow, 
@@ -14,10 +15,11 @@ import {
   Linkedin,
   Twitter,
   Mail,
-  ExternalLink
+  ExternalLink,
+  Menu,
+  X
 } from 'lucide-react';
 
-// Importando ícones de marcas populares
 import { 
   SiOpenai, 
   SiPython, 
@@ -27,43 +29,100 @@ import {
   SiPostgresql, 
   SiTailwindcss, 
   SiN8N,
-  SiJavascript,
   SiTypescript,
   SiDocker
 } from 'react-icons/si';
 import { TbMessageChatbot, TbDatabaseSearch } from 'react-icons/tb';
-
-// --- Components ---
+import { sendPlaybook } from '@/app/actions/send-playbook';
+import { sendContactRequest } from '@/app/actions/send-contact';
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: "#servicos", label: "Serviços" },
+    { href: "#tecnologias", label: "Tecnologias" },
+    { href: "#processo", label: "Processo" },
+    { href: "#faq", label: "FAQ" },
+  ];
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-light border-b border-blue-600/5 backdrop-blur-xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-        <div className="flex items-center gap-2 group cursor-pointer shrink-0">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center font-bold text-lg sm:text-2xl text-white group-hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20">A</div>
-          <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">ayolabs</span>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
+        <a href="#home" className="shrink-0 group cursor-pointer">
+          <Image
+            src="/logo.png"
+            alt="ayolabs"
+            width={434}
+            height={138}
+            className="h-10 w-auto sm:h-14 md:h-16"
+            priority
+          />
+        </a>
         
         <div className="hidden lg:flex items-center gap-8 text-sm font-bold text-slate-600">
-          <a href="#servicos" className="hover:text-blue-600 transition-colors">Serviços</a>
-          <a href="#tecnologias" className="hover:text-blue-600 transition-colors">Tecnologias</a>
-          <a href="#processo" className="hover:text-blue-600 transition-colors">Processo</a>
-          <a href="#faq" className="hover:text-blue-600 transition-colors">FAQ</a>
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className="hover:text-blue-600 transition-colors">
+              {link.label}
+            </a>
+          ))}
         </div>
         
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 sm:px-7 sm:py-3 rounded-full text-xs sm:text-sm font-black transition-all hover:scale-105 shadow-xl shadow-blue-600/30 active:scale-95 shrink-0">
-          <span className="hidden xs:inline">Agendar Consultoria</span>
-          <span className="xs:hidden font-bold">Contato</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <a 
+            href="#contato"
+            className="hidden xs:flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 sm:px-7 sm:py-3 rounded-full text-xs sm:text-sm font-black transition-all hover:scale-105 shadow-xl shadow-blue-600/30 active:scale-95 shrink-0 text-center"
+          >
+            Agendar Consultoria
+          </a>
+          
+          <button 
+            className="lg:hidden p-2 text-slate-600 hover:text-blue-600 transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-b border-slate-100 overflow-hidden"
+          >
+            <div className="flex flex-col p-4 gap-4">
+              {navLinks.map((link) => (
+                <a 
+                  key={link.href} 
+                  href={link.href} 
+                  className="text-lg font-bold text-slate-600 hover:text-blue-600 py-2 border-b border-slate-50 last:border-0"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a 
+                href="#contato"
+                className="bg-blue-600 text-white p-4 rounded-2xl font-black text-center mt-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Agendar Consultoria
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
 const Hero = () => {
   return (
-    <section className="relative pt-32 pb-16 sm:pt-48 sm:pb-32 overflow-hidden bg-blue-soft">
-      {/* Background Shapes */}
+    <section id="home" className="relative pt-44 pb-16 sm:pt-48 sm:pb-32 overflow-hidden bg-blue-soft">
       <div className="absolute top-0 right-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-blue-100/30 rounded-full blur-[80px] sm:blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-sky-100/30 rounded-full blur-[80px] sm:blur-[120px] -z-10 -translate-x-1/2 translate-y-1/2" />
       
@@ -85,12 +144,18 @@ const Hero = () => {
             capacidade produtiva da sua empresa.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-4">
-            <button className="w-full sm:w-auto px-8 py-4 sm:px-12 sm:py-6 bg-blue-600 hover:bg-blue-700 rounded-2xl sm:rounded-3xl font-black flex items-center justify-center gap-3 transition-all hover:scale-105 shadow-2xl shadow-blue-600/40 text-white text-base sm:text-lg">
+            <a 
+              href="#contato"
+              className="w-full sm:w-auto px-8 py-4 sm:px-12 sm:py-6 bg-blue-600 hover:bg-blue-700 rounded-2xl sm:rounded-3xl font-black flex items-center justify-center gap-3 transition-all hover:scale-105 shadow-2xl shadow-blue-600/40 text-white text-base sm:text-lg"
+            >
               Agendar Consultoria <ArrowRight size={20} strokeWidth={3} />
-            </button>
-            <button className="w-full sm:w-auto px-8 py-4 sm:px-12 sm:py-6 border-2 border-slate-200 bg-white hover:bg-slate-50 rounded-2xl sm:rounded-3xl font-black transition-all text-slate-900 text-base sm:text-lg shadow-sm">
+            </a>
+            <a 
+              href="#servicos"
+              className="w-full sm:w-auto px-8 py-4 sm:px-12 sm:py-6 border-2 border-slate-200 bg-white hover:bg-slate-50 rounded-2xl sm:rounded-3xl font-black transition-all text-slate-900 text-base sm:text-lg shadow-sm text-center"
+            >
               Ver Cases
-            </button>
+            </a>
           </div>
         </motion.div>
       </div>
@@ -206,6 +271,30 @@ const TechMarquee = () => {
 };
 
 const Process = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await sendPlaybook(formData);
+
+    if (result.success) {
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsSuccess(false);
+      }, 4000);
+    } else {
+      alert("Houve um problema ao enviar o e-mail: " + result.error);
+    }
+    
+    setIsSubmitting(false);
+  };
+
   const steps = [
     {
       num: "01",
@@ -236,7 +325,10 @@ const Process = () => {
             <p className="text-slate-500 text-base sm:text-xl lg:text-2xl font-medium mb-10 sm:mb-14 leading-relaxed">
               Não fazemos pesquisa acadêmica. Nós entregamos resultados de engenharia que reduzem custos reais.
             </p>
-            <button className="w-full sm:w-auto px-8 py-4 sm:px-10 sm:py-5 border-2 border-slate-900 rounded-2xl sm:rounded-[2rem] hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center gap-3 font-black text-slate-900 text-base sm:text-lg">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full sm:w-auto px-8 py-4 sm:px-10 sm:py-5 border-2 border-slate-900 rounded-2xl sm:rounded-[2rem] hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center gap-3 font-black text-slate-900 text-base sm:text-lg"
+            >
               Baixar Playbook <ExternalLink size={20} strokeWidth={3} />
             </button>
           </div>
@@ -260,12 +352,91 @@ const Process = () => {
           </div>
         </div>
       </div>
+
+      {/* Lead Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl overflow-hidden"
+            >
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-colors"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="text-center">
+                {!isSuccess ? (
+                  <>
+                    <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-600">
+                      <Mail size={32} />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Receba o Playbook</h3>
+                    <p className="text-slate-500 font-medium mb-8">
+                      Enviaremos nosso guia completo de implementação de IA para o seu e-mail.
+                    </p>
+                    <form onSubmit={handleLeadSubmit} className="space-y-4">
+                      <input 
+                        name="name"
+                        type="text" 
+                        required
+                        placeholder="Seu nome" 
+                        className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
+                      />
+                      <input 
+                        name="email"
+                        type="email" 
+                        required
+                        placeholder="E-mail profissional" 
+                        className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
+                      />
+                      <button 
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-600/30 disabled:opacity-50"
+                      >
+                        {isSubmitting ? "Enviando e-mail..." : "Quero Acessar Agora"}
+                      </button>
+                    </form>
+                  </>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="py-6"
+                  >
+                    <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                      <CheckCircle2 size={40} strokeWidth={3} />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Quase lá!</h3>
+                    <p className="text-slate-500 text-lg font-medium leading-relaxed">
+                      O link para download acaba de ser enviado para sua caixa de entrada.
+                    </p>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = React.useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
     {
@@ -310,24 +481,83 @@ const FAQ = () => {
 };
 
 const Contact = () => {
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await sendContactRequest(formData);
+
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      alert("Houve um problema: " + result.error);
+    }
+    
+    setIsSubmitting(false);
+  };
+
   return (
-    <section className="py-24 sm:py-40 relative overflow-hidden bg-white">
+    <section id="contato" className="py-24 sm:py-40 relative overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
         <div className="card-white p-8 sm:p-16 md:p-32 rounded-[2rem] sm:rounded-[4rem] border-blue-600/10 bg-gradient-to-b from-white to-blue-50/50">
           <h2 className="text-3xl sm:text-5xl lg:text-8xl font-black mb-6 sm:mb-10 leading-tight text-slate-900">Pronto para <br />Escalar?</h2>
-          <p className="text-slate-500 mb-10 sm:mb-16 max-w-2xl mx-auto text-base sm:text-lg md:text-2xl font-medium px-2">
-            Agende uma reunião e descubra o potencial da sua operação.
-          </p>
-          <form className="max-w-lg mx-auto space-y-4 sm:space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Seu e-mail profissional" 
-              className="w-full px-6 py-4 sm:px-10 sm:py-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900 text-sm sm:text-lg placeholder:text-slate-400"
-            />
-            <button className="w-full py-4 sm:py-6 bg-blue-600 hover:bg-blue-700 rounded-2xl sm:rounded-3xl font-black text-base sm:text-xl transition-all shadow-2xl shadow-blue-600/30 text-white">
-              Solicitar Diagnóstico
-            </button>
-          </form>
+          
+          <AnimatePresence mode="wait">
+            {!submitted ? (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <p className="text-slate-500 mb-10 sm:mb-16 max-w-2xl mx-auto text-base sm:text-lg md:text-2xl font-medium px-2">
+                  Agende uma reunião e descubra o potencial da sua operação.
+                </p>
+                <form 
+                  className="max-w-lg mx-auto space-y-4 sm:space-y-6" 
+                  onSubmit={handleSubmit}
+                >
+                  <input 
+                    name="email"
+                    type="email" 
+                    required
+                    placeholder="Seu e-mail profissional" 
+                    className="w-full px-6 py-4 sm:px-10 sm:py-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900 text-sm sm:text-lg placeholder:text-slate-400"
+                  />
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full py-4 sm:py-6 bg-blue-600 hover:bg-blue-700 rounded-2xl sm:rounded-3xl font-black text-base sm:text-xl transition-all shadow-2xl shadow-blue-600/30 text-white disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Enviando solicitação..." : "Solicitar Diagnóstico"}
+                  </button>
+                </form>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="py-10"
+              >
+                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                  <CheckCircle2 size={40} strokeWidth={3} />
+                </div>
+                <h3 className="text-2xl sm:text-4xl font-black text-slate-900 mb-4">Solicitação Enviada!</h3>
+                <p className="text-slate-500 text-lg font-medium">Entraremos em contato em menos de 24 horas.</p>
+                <button 
+                  onClick={() => setSubmitted(false)}
+                  className="mt-8 text-blue-600 font-bold hover:underline"
+                >
+                  Enviar outro e-mail
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>
@@ -338,15 +568,28 @@ const Footer = () => {
   return (
     <footer className="py-12 sm:py-20 border-t border-slate-100 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-10">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-8 h-8 sm:w-11 sm:h-11 bg-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center font-bold text-lg sm:text-2xl text-white shadow-lg shadow-blue-600/20">A</div>
-          <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">ayolabs</span>
+        <div className="shrink-0">
+          <Image
+            src="/logo.png"
+            alt="ayolabs"
+            width={434}
+            height={138}
+            className="h-14 w-auto sm:h-18 md:h-16"
+          />
         </div>
         <div className="flex gap-8 sm:gap-12 text-slate-400">
-          <Github className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
-          <Linkedin className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
-          <Twitter className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
-          <Mail className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <Github className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+            <Linkedin className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <Twitter className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
+          </a>
+          <a href="mailto:contato@ayolabs.com.br">
+            <Mail className="hover:text-blue-600 cursor-pointer transition-all hover:scale-125" size={24} />
+          </a>
         </div>
         <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-center">
           &copy; {new Date().getFullYear()} ayolabs. AI Engineering.
@@ -355,8 +598,6 @@ const Footer = () => {
     </footer>
   );
 };
-
-// --- Page Main ---
 
 export default function LandingPage() {
   return (
