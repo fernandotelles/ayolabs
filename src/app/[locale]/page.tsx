@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Bot, 
-  Workflow, 
-  Code2, 
-  ArrowRight, 
-  CheckCircle2, 
-  Plus, 
+import {
+  Bot,
+  Workflow,
+  Code2,
+  ArrowRight,
+  CheckCircle2,
+  Plus,
   Minus,
   Github,
   Linkedin,
@@ -17,33 +17,91 @@ import {
   Mail,
   ExternalLink,
   Menu,
-  X
+  X,
+  ChevronDown
 } from 'lucide-react';
 
-import { 
-  SiOpenai, 
-  SiPython, 
-  SiReact, 
-  SiNextdotjs, 
-  SiVercel, 
-  SiPostgresql, 
-  SiTailwindcss, 
+import {
+  SiOpenai,
+  SiPython,
+  SiReact,
+  SiNextdotjs,
+  SiVercel,
+  SiPostgresql,
+  SiTailwindcss,
   SiN8N,
   SiTypescript,
   SiDocker
 } from 'react-icons/si';
 import { TbMessageChatbot, TbDatabaseSearch } from 'react-icons/tb';
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter, usePathname } from '@/i18n/navigation';
 import { sendPlaybook } from '@/app/actions/send-playbook';
 import { sendContactRequest } from '@/app/actions/send-contact';
 
+const LanguageSwitcher = () => {
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const locales = [
+    { code: 'pt', label: 'PT', flag: '🇧🇷' },
+    { code: 'en', label: 'EN', flag: '🇺🇸' },
+    { code: 'es', label: 'ES', flag: '🇪🇸' },
+  ];
+
+  const switchLocale = (newLocale: string) => {
+    router.replace(pathname, { locale: newLocale as 'pt' | 'en' | 'es' });
+    setIsOpen(false);
+  };
+
+  const current = locales.find(l => l.code === locale) || locales[0];
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-1.5 text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors px-2 py-1"
+      >
+        <span>{current.flag}</span>
+        <span>{current.label}</span>
+        <ChevronDown size={14} strokeWidth={3} />
+      </button>
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+          <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden z-50 min-w-[90px]">
+            {locales.map((loc) => (
+              <button
+                key={loc.code}
+                onClick={() => switchLocale(loc.code)}
+                className={`w-full flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-colors ${
+                  loc.code === locale
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <span>{loc.flag}</span>
+                <span>{loc.label}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const t = useTranslations('nav');
 
   const navLinks = [
-    { href: "#servicos", label: "Serviços" },
-    { href: "#tecnologias", label: "Tecnologias" },
-    { href: "#processo", label: "Processo" },
-    { href: "#faq", label: "FAQ" },
+    { href: "#servicos", label: t('services') },
+    { href: "#tecnologias", label: t('technologies') },
+    { href: "#processo", label: t('process') },
+    { href: "#faq", label: t('faq') },
   ];
 
   return (
@@ -59,7 +117,7 @@ const Navbar = () => {
             priority
           />
         </a>
-        
+
         <div className="hidden lg:flex items-center gap-8 text-sm font-bold text-slate-600">
           {navLinks.map((link) => (
             <a key={link.href} href={link.href} className="hover:text-blue-600 transition-colors">
@@ -67,16 +125,17 @@ const Navbar = () => {
             </a>
           ))}
         </div>
-        
+
         <div className="flex items-center gap-3">
-          <a 
+          <LanguageSwitcher />
+          <a
             href="#contato"
             className="hidden xs:flex bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 sm:px-7 sm:py-3 rounded-full text-xs sm:text-sm font-black transition-all hover:scale-105 shadow-xl shadow-blue-600/30 active:scale-95 shrink-0 text-center"
           >
-            Agendar Consultoria
+            {t('cta')}
           </a>
-          
-          <button 
+
+          <button
             className="lg:hidden p-2 text-slate-600 hover:text-blue-600 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -96,21 +155,21 @@ const Navbar = () => {
           >
             <div className="flex flex-col p-4 gap-4">
               {navLinks.map((link) => (
-                <a 
-                  key={link.href} 
-                  href={link.href} 
+                <a
+                  key={link.href}
+                  href={link.href}
                   className="text-lg font-bold text-slate-600 hover:text-blue-600 py-2 border-b border-slate-50 last:border-0"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
                 </a>
               ))}
-              <a 
+              <a
                 href="#contato"
                 className="bg-blue-600 text-white p-4 rounded-2xl font-black text-center mt-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Agendar Consultoria
+                {t('cta')}
               </a>
             </div>
           </motion.div>
@@ -121,11 +180,12 @@ const Navbar = () => {
 };
 
 const Hero = () => {
+  const t = useTranslations('hero');
   return (
     <section id="home" className="relative pt-32 pb-16 sm:pt-48 sm:pb-32 overflow-hidden bg-blue-soft">
       <div className="absolute top-0 right-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-blue-100/30 rounded-full blur-[80px] sm:blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] bg-sky-100/30 rounded-full blur-[80px] sm:blur-[120px] -z-10 -translate-x-1/2 translate-y-1/2" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -133,28 +193,27 @@ const Hero = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 mb-6 sm:mb-8 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] border border-blue-600/10 rounded-full bg-blue-600/5 text-blue-600">
-            IA & Automação Sênior
+            {t('badge')}
           </span>
           <h1 className="text-4xl xs:text-5xl md:text-7xl lg:text-8xl font-black mb-6 sm:mb-10 leading-[1.1] tracking-tight text-slate-900">
-            Escalabilidade com <br />
-            <span className="text-gradient-blue text-balance">IA Sob Medida</span>
+            {t('heading1')} <br />
+            <span className="text-gradient-blue text-balance">{t('heading2')}</span>
           </h1>
           <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-2xl text-slate-500 font-medium mb-10 sm:mb-14 leading-relaxed px-2">
-            Estratégias de IA focadas em reduzir custos e maximizar a 
-            capacidade produtiva da sua empresa.
+            {t('description')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-4">
-            <a 
+            <a
               href="#contato"
               className="w-full sm:w-auto px-8 py-4 sm:px-12 sm:py-6 bg-blue-600 hover:bg-blue-700 rounded-2xl sm:rounded-3xl font-black flex items-center justify-center gap-3 transition-all hover:scale-105 shadow-2xl shadow-blue-600/40 text-white text-base sm:text-lg"
             >
-              Agendar Consultoria <ArrowRight size={20} strokeWidth={3} />
+              {t('cta1')} <ArrowRight size={20} strokeWidth={3} />
             </a>
-            <a 
+            <a
               href="#servicos"
               className="w-full sm:w-auto px-8 py-4 sm:px-12 sm:py-6 border-2 border-slate-200 bg-white hover:bg-slate-50 rounded-2xl sm:rounded-3xl font-black transition-all text-slate-900 text-base sm:text-lg shadow-sm text-center"
             >
-              Ver Cases
+              {t('cta2')}
             </a>
           </div>
         </motion.div>
@@ -163,45 +222,31 @@ const Hero = () => {
   );
 };
 
+const serviceIcons = [
+  <Code2 key="code" className="text-blue-600" size={32} />,
+  <Bot key="bot" className="text-sky-500" size={32} />,
+  <Workflow key="workflow" className="text-indigo-600" size={32} />,
+  <ExternalLink key="link" className="text-blue-600" size={32} />,
+];
+
 const Services = () => {
-  const services = [
-    {
-      title: "Fullstack Engineering",
-      description: "Desenvolvimento de ecossistemas robustos (SaaS, Dashboards) com foco em arquitetura limpa e alta disponibilidade.",
-      icon: <Code2 className="text-blue-600" size={32} />,
-      features: ["Next.js & Node.js", "Microsserviços", "Cloud Native"]
-    },
-    {
-      title: "Agentes de IA (RAG)",
-      description: "Arquiteturas RAG que permitem que a IA responda com base em documentos técnicos com precisão cirúrgica.",
-      icon: <Bot className="text-sky-500" size={32} />,
-      features: ["Busca Semântica", "Pinecone/Supabase", "OpenAI & Claude"]
-    },
-    {
-      title: "Automação Workflow",
-      description: "Orquestração de processos complexos via Make/n8n ou código customizado para escala empresarial.",
-      icon: <Workflow className="text-indigo-600" size={32} />,
-      features: ["Integração de APIs", "Zero Tasks Manuais", "Foco em ROI"]
-    },
-    {
-      title: "Consultoria Técnica",
-      description: "Mentoria e desenho de solução para empresas que precisam implementar IA de forma segura.",
-      icon: <ExternalLink className="text-blue-600" size={32} />,
-      features: ["Code Review Sênior", "Roadmap Tech", "Segurança"]
-    }
-  ];
+  const t = useTranslations('services');
+  const serviceItems = t.raw('items') as Array<{title: string; description: string; features: string[]}>;
+  const services = serviceItems.map((item, i) => ({ ...item, icon: serviceIcons[i] }));
 
   return (
     <section id="servicos" className="py-20 sm:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-16 sm:mb-24">
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black mb-6 sm:mb-8 text-slate-900 leading-tight">Engenharia de <br /><span className="text-blue-600">Nível Sênior</span></h2>
-          <p className="text-slate-500 text-base sm:text-xl md:text-2xl font-medium max-w-3xl mx-auto">Soluções arquitetadas para suportar o crescimento do seu negócio.</p>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black mb-6 sm:mb-8 text-slate-900 leading-tight">
+            {t('heading1')} <br /><span className="text-blue-600">{t('heading2')}</span>
+          </h2>
+          <p className="text-slate-500 text-base sm:text-xl md:text-2xl font-medium max-w-3xl mx-auto">{t('subtitle')}</p>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {services.map((service, index) => (
-            <motion.div 
+            <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -231,6 +276,7 @@ const Services = () => {
 };
 
 const TechMarquee = () => {
+  const t = useTranslations('tech');
   const techs = [
     { name: "OpenAI", icon: <SiOpenai size={28} /> },
     { name: "LangChain", icon: <TbMessageChatbot size={28} /> },
@@ -245,14 +291,14 @@ const TechMarquee = () => {
     { name: "Docker", icon: <SiDocker size={28} /> },
     { name: "TypeScript", icon: <SiTypescript size={28} /> }
   ];
-  
+
   return (
     <section id="tecnologias" className="py-16 sm:py-24 border-y border-slate-100 overflow-hidden bg-slate-50 relative">
       <div className="absolute inset-y-0 left-0 w-20 sm:w-40 bg-gradient-to-r from-slate-50 to-transparent z-10" />
       <div className="absolute inset-y-0 right-0 w-20 sm:w-40 bg-gradient-to-l from-slate-50 to-transparent z-10" />
-      
+
       <div className="max-w-7xl mx-auto px-4 mb-10 sm:mb-16 text-center">
-        <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-blue-600">Nossa Toolbox</p>
+        <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-blue-600">{t('label')}</p>
       </div>
       <div className="animate-marquee gap-10 sm:gap-20 flex px-10">
         {[...techs, ...techs].map((tech, i) => (
@@ -274,11 +320,12 @@ const Process = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const t = useTranslations('process');
 
   const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const formData = new FormData(e.currentTarget);
     const result = await sendPlaybook(formData);
 
@@ -289,29 +336,13 @@ const Process = () => {
         setIsSuccess(false);
       }, 4000);
     } else {
-      alert("Houve um problema ao enviar o e-mail: " + result.error);
+      alert(t('modal.errorPrefix') + result.error);
     }
-    
+
     setIsSubmitting(false);
   };
 
-  const steps = [
-    {
-      num: "01",
-      title: "Diagnóstico",
-      description: "Mapeamos onde a IA trará o maior retorno financeiro para o seu negócio."
-    },
-    {
-      num: "02",
-      title: "Arquitetura",
-      description: "Desenvolvemos a estrutura focando em segurança e facilidade de uso."
-    },
-    {
-      num: "03",
-      title: "Implementação",
-      description: "Soluções em produção com suporte contínuo para garantir resultados."
-    }
-  ];
+  const steps = t.raw('steps') as Array<{num: string; title: string; description: string}>;
 
   return (
     <section id="processo" className="py-20 sm:py-32 bg-white overflow-hidden">
@@ -319,22 +350,22 @@ const Process = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div>
             <h2 className="text-3xl sm:text-5xl lg:text-7xl font-black mb-8 leading-tight text-slate-900 text-balance">
-              Metodologia <br />
-              <span className="text-blue-600">Ágil & Pragmática</span>
+              {t('heading1')} <br />
+              <span className="text-blue-600">{t('heading2')}</span>
             </h2>
             <p className="text-slate-500 text-base sm:text-xl lg:text-2xl font-medium mb-10 sm:mb-14 leading-relaxed">
-              Não fazemos pesquisa acadêmica. Nós entregamos resultados de engenharia que reduzem custos reais.
+              {t('description')}
             </p>
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
               className="w-full sm:w-auto px-8 py-4 sm:px-10 sm:py-5 border-2 border-slate-900 rounded-2xl sm:rounded-[2rem] hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center gap-3 font-black text-slate-900 text-base sm:text-lg"
             >
-              Baixar Playbook <ExternalLink size={20} strokeWidth={3} />
+              {t('cta')} <ExternalLink size={20} strokeWidth={3} />
             </button>
           </div>
           <div className="space-y-6 sm:space-y-8">
             {steps.map((step, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -357,20 +388,20 @@ const Process = () => {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-lg bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl overflow-hidden"
             >
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-colors"
               >
@@ -383,31 +414,31 @@ const Process = () => {
                     <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-600">
                       <Mail size={32} />
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Receba o Playbook</h3>
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">{t('modal.title')}</h3>
                     <p className="text-slate-500 font-medium mb-8">
-                      Enviaremos nosso guia completo de implementação de IA para o seu e-mail.
+                      {t('modal.description')}
                     </p>
                     <form onSubmit={handleLeadSubmit} className="space-y-4">
-                      <input 
+                      <input
                         name="name"
-                        type="text" 
+                        type="text"
                         required
-                        placeholder="Seu nome" 
+                        placeholder={t('modal.namePlaceholder')}
                         className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
                       />
-                      <input 
+                      <input
                         name="email"
-                        type="email" 
+                        type="email"
                         required
-                        placeholder="E-mail profissional" 
+                        placeholder={t('modal.emailPlaceholder')}
                         className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900"
                       />
-                      <button 
+                      <button
                         type="submit"
                         disabled={isSubmitting}
                         className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-lg transition-all shadow-xl shadow-blue-600/30 disabled:opacity-50"
                       >
-                        {isSubmitting ? "Enviando e-mail..." : "Quero Acessar Agora"}
+                        {isSubmitting ? t('modal.submitLoading') : t('modal.submit')}
                       </button>
                     </form>
                   </>
@@ -420,9 +451,9 @@ const Process = () => {
                     <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
                       <CheckCircle2 size={40} strokeWidth={3} />
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Quase lá!</h3>
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-4">{t('modal.successTitle')}</h3>
                     <p className="text-slate-500 text-lg font-medium leading-relaxed">
-                      O link para download acaba de ser enviado para sua caixa de entrada.
+                      {t('modal.successDescription')}
                     </p>
                   </motion.div>
                 )}
@@ -437,30 +468,17 @@ const Process = () => {
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const faqs = [
-    {
-      q: "A IA terá acesso aos meus dados?",
-      a: "Toda a implementação segue padrões de conformidade Enterprise. Seus dados não são usados para treinamento de modelos públicos."
-    },
-    {
-      q: "Em quanto tempo vejo retorno?",
-      a: "Projetos de automação costumam se pagar em 3 a 6 meses através da redução de erros e horas humanas."
-    },
-    {
-      q: "Vocês dão manutenção?",
-      a: "Sim, oferecemos planos de suporte contínuo para garantir que as soluções acompanhem o seu crescimento."
-    }
-  ];
+  const t = useTranslations('faq');
+  const faqs = t.raw('items') as Array<{q: string; a: string}>;
 
   return (
     <section id="faq" className="py-20 sm:py-32 bg-slate-50 overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black mb-12 sm:mb-20 text-center text-slate-900">FAQ</h2>
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black mb-12 sm:mb-20 text-center text-slate-900">{t('title')}</h2>
         <div className="space-y-4 sm:space-y-6">
           {faqs.map((faq, i) => (
             <div key={i} className="card-white rounded-2xl sm:rounded-[2.5rem] overflow-hidden">
-              <button 
+              <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full px-6 py-6 sm:px-10 sm:py-10 flex items-center justify-between text-left font-black text-base sm:text-xl text-slate-900 transition-colors"
               >
@@ -483,20 +501,21 @@ const FAQ = () => {
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const t = useTranslations('contact');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const formData = new FormData(e.currentTarget);
     const result = await sendContactRequest(formData);
 
     if (result.success) {
       setSubmitted(true);
     } else {
-      alert("Houve um problema: " + result.error);
+      alert(t('errorPrefix') + result.error);
     }
-    
+
     setIsSubmitting(false);
   };
 
@@ -504,8 +523,10 @@ const Contact = () => {
     <section id="contato" className="py-24 sm:py-40 relative overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
         <div className="card-white p-8 sm:p-12 md:p-24 rounded-[2rem] sm:rounded-[4rem] border-blue-600/10 bg-gradient-to-b from-white to-blue-50/50">
-          <h2 className="text-3xl sm:text-5xl lg:text-8xl font-black mb-6 sm:mb-10 leading-tight text-slate-900">Pronto para <br />Escalar?</h2>
-          
+          <h2 className="text-3xl sm:text-5xl lg:text-8xl font-black mb-6 sm:mb-10 leading-tight text-slate-900">
+            {t('heading1')} <br />{t('heading2')}
+          </h2>
+
           <AnimatePresence mode="wait">
             {!submitted ? (
               <motion.div
@@ -515,25 +536,25 @@ const Contact = () => {
                 exit={{ opacity: 0, y: -10 }}
               >
                 <p className="text-slate-500 mb-10 sm:mb-16 max-w-2xl mx-auto text-base sm:text-lg md:text-2xl font-medium px-2">
-                  Agende uma reunião e descubra o potencial da sua operação.
+                  {t('description')}
                 </p>
-                <form 
-                  className="max-w-lg mx-auto space-y-4 sm:space-y-6" 
+                <form
+                  className="max-w-lg mx-auto space-y-4 sm:space-y-6"
                   onSubmit={handleSubmit}
                 >
-                  <input 
+                  <input
                     name="email"
-                    type="email" 
+                    type="email"
                     required
-                    placeholder="Seu e-mail profissional" 
+                    placeholder={t('emailPlaceholder')}
                     className="w-full px-6 py-4 sm:px-10 sm:py-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-blue-600 transition-all font-bold text-slate-900 text-sm sm:text-lg placeholder:text-slate-400"
                   />
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={isSubmitting}
                     className="w-full py-4 sm:py-6 bg-blue-600 hover:bg-blue-700 rounded-2xl sm:rounded-3xl font-black text-base sm:text-xl transition-all shadow-2xl shadow-blue-600/30 text-white disabled:opacity-50"
                   >
-                    {isSubmitting ? "Enviando solicitação..." : "Solicitar Diagnóstico"}
+                    {isSubmitting ? t('submitLoading') : t('submit')}
                   </button>
                 </form>
               </motion.div>
@@ -547,13 +568,13 @@ const Contact = () => {
                 <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
                   <CheckCircle2 size={40} strokeWidth={3} />
                 </div>
-                <h3 className="text-2xl sm:text-4xl font-black text-slate-900 mb-4">Solicitação Enviada!</h3>
-                <p className="text-slate-500 text-lg font-medium">Entraremos em contato em menos de 24 horas.</p>
-                <button 
+                <h3 className="text-2xl sm:text-4xl font-black text-slate-900 mb-4">{t('successTitle')}</h3>
+                <p className="text-slate-500 text-lg font-medium">{t('successDescription')}</p>
+                <button
                   onClick={() => setSubmitted(false)}
                   className="mt-8 text-blue-600 font-bold hover:underline"
                 >
-                  Enviar outro e-mail
+                  {t('sendAnother')}
                 </button>
               </motion.div>
             )}
@@ -565,6 +586,7 @@ const Contact = () => {
 };
 
 const Footer = () => {
+  const t = useTranslations('footer');
   return (
     <footer className="py-12 sm:py-20 border-t border-slate-100 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-10">
@@ -592,7 +614,7 @@ const Footer = () => {
           </a>
         </div>
         <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-center">
-          &copy; {new Date().getFullYear()} ayolabs. AI Engineering.
+          {t('copyright', {year: new Date().getFullYear()})}
         </p>
       </div>
     </footer>

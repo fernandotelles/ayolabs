@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "services": "Serviços",
+    "technologies": "Tecnologias",
+    "process": "Processo",
+    "faq": "FAQ",
+    "cta": "Agendar Consultoria"
+  },
+  "hero": {
+    "badge": "IA & Automação Sênior",
+    "heading1": "Escalabilidade com",
+    "heading2": "IA Sob Medida",
+    "description": "Estratégias de IA focadas em reduzir custos e maximizar a capacidade produtiva da sua empresa.",
+    "cta1": "Agendar Consultoria",
+    "cta2": "Ver Cases"
+  },
+  "services": {
+    "heading1": "Engenharia de",
+    "heading2": "Nível Sênior",
+    "subtitle": "Soluções arquitetadas para suportar o crescimento do seu negócio.",
+    "items": [
+      {
+        "title": "Fullstack Engineering",
+        "description": "Desenvolvimento de ecossistemas robustos (SaaS, Dashboards) com foco em arquitetura limpa e alta disponibilidade.",
+        "features": ["Next.js & Node.js", "Microsserviços", "Cloud Native"]
+      },
+      {
+        "title": "Agentes de IA (RAG)",
+        "description": "Arquiteturas RAG que permitem que a IA responda com base em documentos técnicos com precisão cirúrgica.",
+        "features": ["Busca Semântica", "Pinecone/Supabase", "OpenAI & Claude"]
+      },
+      {
+        "title": "Automação Workflow",
+        "description": "Orquestração de processos complexos via Make/n8n ou código customizado para escala empresarial.",
+        "features": ["Integração de APIs", "Zero Tasks Manuais", "Foco em ROI"]
+      },
+      {
+        "title": "Consultoria Técnica",
+        "description": "Mentoria e desenho de solução para empresas que precisam implementar IA de forma segura.",
+        "features": ["Code Review Sênior", "Roadmap Tech", "Segurança"]
+      }
+    ]
+  },
+  "tech": {
+    "label": "Nossa Toolbox"
+  },
+  "process": {
+    "heading1": "Metodologia",
+    "heading2": "Ágil & Pragmática",
+    "description": "Não fazemos pesquisa acadêmica. Nós entregamos resultados de engenharia que reduzem custos reais.",
+    "cta": "Baixar Playbook",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Diagnóstico",
+        "description": "Mapeamos onde a IA trará o maior retorno financeiro para o seu negócio."
+      },
+      {
+        "num": "02",
+        "title": "Arquitetura",
+        "description": "Desenvolvemos a estrutura focando em segurança e facilidade de uso."
+      },
+      {
+        "num": "03",
+        "title": "Implementação",
+        "description": "Soluções em produção com suporte contínuo para garantir resultados."
+      }
+    ],
+    "modal": {
+      "title": "Receba o Playbook",
+      "description": "Enviaremos nosso guia completo de implementação de IA para o seu e-mail.",
+      "namePlaceholder": "Seu nome",
+      "emailPlaceholder": "E-mail profissional",
+      "submitLoading": "Enviando e-mail...",
+      "submit": "Quero Acessar Agora",
+      "successTitle": "Quase lá!",
+      "successDescription": "O link para download acaba de ser enviado para sua caixa de entrada.",
+      "errorPrefix": "Houve um problema ao enviar o e-mail: "
+    }
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "q": "A IA terá acesso aos meus dados?",
+        "a": "Toda a implementação segue padrões de conformidade Enterprise. Seus dados não são usados para treinamento de modelos públicos."
+      },
+      {
+        "q": "Em quanto tempo vejo retorno?",
+        "a": "Projetos de automação costumam se pagar em 3 a 6 meses através da redução de erros e horas humanas."
+      },
+      {
+        "q": "Vocês dão manutenção?",
+        "a": "Sim, oferecemos planos de suporte contínuo para garantir que as soluções acompanhem o seu crescimento."
+      }
+    ]
+  },
+  "contact": {
+    "heading1": "Pronto para",
+    "heading2": "Escalar?",
+    "description": "Agende uma reunião e descubra o potencial da sua operação.",
+    "emailPlaceholder": "Seu e-mail profissional",
+    "submitLoading": "Enviando solicitação...",
+    "submit": "Solicitar Diagnóstico",
+    "successTitle": "Solicitação Enviada!",
+    "successDescription": "Entraremos em contato em menos de 24 horas.",
+    "sendAnother": "Enviar outro e-mail",
+    "errorPrefix": "Houve um problema: "
+  },
+  "footer": {
+    "copyright": "© {year} ayolabs. AI Engineering."
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "services": "Services",
+    "technologies": "Technologies",
+    "process": "Process",
+    "faq": "FAQ",
+    "cta": "Book a Consultation"
+  },
+  "hero": {
+    "badge": "Senior AI & Automation",
+    "heading1": "Scalability with",
+    "heading2": "AI Built for You",
+    "description": "AI strategies focused on reducing costs and maximizing your company's productive capacity.",
+    "cta1": "Book a Consultation",
+    "cta2": "View Cases"
+  },
+  "services": {
+    "heading1": "Engineering at",
+    "heading2": "Senior Level",
+    "subtitle": "Solutions architected to support your business growth.",
+    "items": [
+      {
+        "title": "Fullstack Engineering",
+        "description": "Development of robust ecosystems (SaaS, Dashboards) with a focus on clean architecture and high availability.",
+        "features": ["Next.js & Node.js", "Microservices", "Cloud Native"]
+      },
+      {
+        "title": "AI Agents (RAG)",
+        "description": "RAG architectures that allow AI to respond based on technical documents with surgical precision.",
+        "features": ["Semantic Search", "Pinecone/Supabase", "OpenAI & Claude"]
+      },
+      {
+        "title": "Workflow Automation",
+        "description": "Orchestration of complex processes via Make/n8n or custom code for enterprise scale.",
+        "features": ["API Integration", "Zero Manual Tasks", "ROI Focused"]
+      },
+      {
+        "title": "Technical Consulting",
+        "description": "Mentoring and solution design for companies that need to implement AI safely.",
+        "features": ["Senior Code Review", "Tech Roadmap", "Security"]
+      }
+    ]
+  },
+  "tech": {
+    "label": "Our Toolbox"
+  },
+  "process": {
+    "heading1": "Agile &",
+    "heading2": "Pragmatic Methodology",
+    "description": "We don't do academic research. We deliver engineering results that reduce real costs.",
+    "cta": "Download Playbook",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Diagnosis",
+        "description": "We map where AI will bring the greatest financial return for your business."
+      },
+      {
+        "num": "02",
+        "title": "Architecture",
+        "description": "We develop the structure focusing on security and ease of use."
+      },
+      {
+        "num": "03",
+        "title": "Implementation",
+        "description": "Production solutions with ongoing support to ensure results."
+      }
+    ],
+    "modal": {
+      "title": "Receive the Playbook",
+      "description": "We'll send our complete AI implementation guide to your email.",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "Professional email",
+      "submitLoading": "Sending email...",
+      "submit": "I Want Access Now",
+      "successTitle": "Almost there!",
+      "successDescription": "The download link has just been sent to your inbox.",
+      "errorPrefix": "There was a problem sending the email: "
+    }
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "q": "Will AI have access to my data?",
+        "a": "All implementation follows Enterprise compliance standards. Your data is not used for training public models."
+      },
+      {
+        "q": "How quickly will I see a return?",
+        "a": "Automation projects typically pay for themselves in 3 to 6 months through reduced errors and human hours."
+      },
+      {
+        "q": "Do you provide maintenance?",
+        "a": "Yes, we offer ongoing support plans to ensure that solutions keep up with your growth."
+      }
+    ]
+  },
+  "contact": {
+    "heading1": "Ready to",
+    "heading2": "Scale?",
+    "description": "Schedule a meeting and discover your operation's potential.",
+    "emailPlaceholder": "Your professional email",
+    "submitLoading": "Sending request...",
+    "submit": "Request Diagnosis",
+    "successTitle": "Request Sent!",
+    "successDescription": "We will get in touch in less than 24 hours.",
+    "sendAnother": "Send another email",
+    "errorPrefix": "There was a problem: "
+  },
+  "footer": {
+    "copyright": "© {year} ayolabs. AI Engineering."
+  }
+}
