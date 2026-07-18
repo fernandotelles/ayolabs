@@ -25,14 +25,14 @@ export async function sendPlaybook(formData: FormData) {
             Conforme prometido, aqui está o link para o nosso guia exclusivo.
           </p>
           <div style="text-align: center; margin: 40px 0;">
-            <a href="${process.env.NEXT_PUBLIC_SITE_URL}/playbook-ayolabs.pdf"
+            <a href="https://ayolabs.vercel.app/playbook-ayolabs.pdf"
                style="background-color: #2563eb; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px;">
               Baixar Playbook (PDF)
             </a>
           </div>
           <p style="font-size: 14px; color: #64748b;">
             Se o botão acima não funcionar, copie e cole este link no seu navegador:<br>
-            ${process.env.NEXT_PUBLIC_SITE_URL}/playbook-ayolabs.pdf
+            https://ayolabs.vercel.app/playbook-ayolabs.pdf
           </p>
           <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 30px 0;">
           <p style="font-size: 12px; color: #94a3b8; text-align: center;">
