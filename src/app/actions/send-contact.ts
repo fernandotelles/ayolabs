@@ -13,7 +13,7 @@ export async function sendContactRequest(formData: FormData) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'ayolabs <onboarding@resend.dev>',
+      from: 'ayolabs <oi@ayolabs.com.br>',
       to: 'contato@ayolabs.com.br', // Email onde você quer receber as notificações
       subject: 'Nova Solicitação de Diagnóstico 🩺',
       html: `
